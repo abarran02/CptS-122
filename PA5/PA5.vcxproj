@@ -140,20 +140,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Data.h" />
-    <ClInclude Include="groceryItem.h" />
-    <ClInclude Include="groceryList.h" />
+    <ClInclude Include="GroceryItem.h" />
+    <ClInclude Include="GroceryList.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QueueNode.h" />
-    <ClInclude Include="testQueue.h" />
+    <ClInclude Include="TestQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Data.cpp" />
-    <ClCompile Include="groceryItem.cpp" />
-    <ClCompile Include="groceryList.cpp" />
+    <ClCompile Include="GroceryItem.cpp" />
+    <ClCompile Include="GroceryList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="QueueNode.cpp" />
-    <ClCompile Include="testQueue.cpp" />
+    <ClCompile Include="TestQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

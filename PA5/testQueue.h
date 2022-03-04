@@ -1,16 +1,25 @@
+/*******************************************************************************
+ * Programmer: Alec Barran                                                     *
+ * Class: CptS 122; Lab Section 06                                             *
+ * Programming Assignment: PA5                                                 *
+ * Date: 03/11/2022                                                            *
+ *                                                                             *
+ * Description: Simulates two grocery checkout lanes, represented by Queues,   *
+ *		to determine which is more efficient. The Queues contain Nodes         *
+ *		representing customers with grocery Lists, and track their time        *
+ *		in line                                                                *
+ *                                                                             *
+ * Relevant Formulas: Refer to each function definition.                       *
+ *                                                                             *
+ * No input or output files required for this program.                         *
+ ******************************************************************************/
+
 #pragma once
 
 #include "Queue.h"
 
 using std::cin;
 using std::rand;
-
-/*
-- One test case that executes your enqueue() operation on an empty queue
-- One test case that executes your enqueue() operation with one node in the queue
-- One test case that executes your dequeue() operation on a queue with one node
-- One test case that executes your dequeue() operation on a queue with two nodes
-*/
 
 void testEnqueueEmpty(void);
 void testEnqueueOne(void);

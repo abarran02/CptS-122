@@ -1,10 +1,39 @@
-#include "testQueue.h"
+/*******************************************************************************
+ * Programmer: Alec Barran                                                     *
+ * Class: CptS 122; Lab Section 06                                             *
+ * Programming Assignment: PA5                                                 *
+ * Date: 03/11/2022                                                            *
+ *                                                                             *
+ * Description: Simulates two grocery checkout lanes, represented by Queues,   *
+ *		to determine which is more efficient. The Queues contain Nodes         *
+ *		representing customers with grocery Lists, and track their time        *
+ *		in line                                                                *
+ *                                                                             *
+ * Relevant Formulas: Refer to each function definition.                       *
+ *                                                                             *
+ * No input or output files required for this program.                         *
+ ******************************************************************************/
 
+#include "TestQueue.h"
+
+ /*************************************************************
+  * Function: testEnqueueEmpty ()                             *
+  * Date Created:                                             *
+  * Date Last Modified:                                       *
+  * Description: test function for Queue class enqueue ()     *
+  *		starting with an empty queue                          *
+  * Input parameters: void                                    *
+  * Returns: void                                             *
+  * Preconditions:                                            *
+  * Postconditions:                                           *
+  *************************************************************/
 void testEnqueueEmpty(void) {
 	bool success;
 	Queue queue;
+	// grocery list is empty, but doesn't matter unless simulating
 	GroceryList* groceries = new GroceryList();
 
+	// add a single customer to empty queue
 	success = queue.enqueue(groceries);
 
 	// successfully allocated memory
@@ -41,11 +70,24 @@ void testEnqueueEmpty(void) {
 
 }
 
+/*************************************************************
+ * Function: testEnqueueOne ()                               *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: test function for Queue class enqueue ()     *
+ *		starting with one item already in queue              *
+ * Input parameters: void                                    *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void testEnqueueOne(void) {
-	Queue queue = Queue();
+	Queue queue;
 	GroceryList* groceries = new GroceryList();
 
+	// add two customers to the queue
 	queue.enqueue(groceries);
+	// need a new grocery list so items in queue are different
 	groceries = new GroceryList();
 	queue.enqueue(groceries);
 
@@ -74,11 +116,23 @@ void testEnqueueOne(void) {
 	}
 }
 
+/*************************************************************
+ * Function: testDequeueOne ()                               *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: test function for Queue class dequeue ()     *
+ *		with one item in the queue                           *
+ * Input parameters: void                                    *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void testDequeueOne(void) {
 	bool success;
-	Queue queue = Queue();
+	Queue queue;
 	GroceryList* groceries = new GroceryList();
 
+	// add one customer to the queue, to be dequeued later
 	success = queue.enqueue(groceries);
 
 	// check that memory successfully allocated
@@ -101,10 +155,22 @@ void testDequeueOne(void) {
 	}
 }
 
+/*************************************************************
+ * Function: testDequeueTwo ()                               *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: test function for Queue class dequeue ()     *
+ *		with two items in the queue                          *
+ * Input parameters: void                                    *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void testDequeueTwo(void) {
-	Queue queue = Queue();
+	Queue queue;
 	GroceryList* groceries = new GroceryList();
 
+	// add two customers to the queue, one of which will be dequeued later
 	queue.enqueue(groceries);
 	groceries = new GroceryList();
 	queue.enqueue(groceries);
@@ -137,6 +203,18 @@ void testDequeueTwo(void) {
 	}
 }
 
+/*************************************************************
+ * Function: runSimulation ()                                *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: test function for all Queue functions by     *
+ *		running a simulation of two queues, one express and  *
+ *		one normal, for n minutes as provided by user        *
+ * Input parameters: int n                                   *
+ * Returns: void                                             *
+ * Preconditions: n > 0                                      *
+ * Postconditions:                                           *
+ *************************************************************/
 void runSimulation(int n) {
 	Queue expressLane(true), normalLane(false);
 	GroceryList* randGroceries;
@@ -191,10 +269,10 @@ void runSimulation(int n) {
 
 		// increment time and decrement leaders' service times
 		if (!expressLane.isEmpty()) {
-			expressLane.serviceLeader();
+			expressLane.decrementLeader();
 		}
 		if (!normalLane.isEmpty()) {
-			normalLane.serviceLeader();
+			normalLane.decrementLeader();
 		}
 
 		currentTime++;

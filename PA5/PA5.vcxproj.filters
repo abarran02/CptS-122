@@ -24,13 +24,13 @@
     <ClInclude Include="Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="testQueue.h">
+    <ClInclude Include="TestQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="groceryItem.h">
+    <ClInclude Include="GroceryItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="groceryList.h">
+    <ClInclude Include="GroceryList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,16 +44,16 @@
     <ClCompile Include="QueueNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testQueue.cpp">
+    <ClCompile Include="TestQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="groceryItem.cpp">
+    <ClCompile Include="GroceryItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="groceryList.cpp">
+    <ClCompile Include="GroceryList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
