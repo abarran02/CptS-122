@@ -31,6 +31,29 @@ GroceryList::GroceryList() {
 }
 
 /*************************************************************
+ * Function: GroceryList ()                                  *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: copy constructor for GroceryList class       *
+ * Input parameters: const GroceryList& copyList             *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
+GroceryList::GroceryList(const GroceryList& copyList) {
+	GroceryItem* pCurrent = copyList.getHead();
+
+	if (pCurrent == NULL) {
+		pHead = NULL;
+	}
+
+	while (pCurrent != NULL) {
+		insertAtEnd(pCurrent->getData());
+		pCurrent = pCurrent->getNext();
+	}
+}
+
+/*************************************************************
  * Function: ~GroceryList ()                                 *
  * Date Created:                                             *
  * Date Last Modified:                                       *
@@ -91,6 +114,46 @@ bool GroceryList::insertAtFront(string info) {
 		else {
 			newItem->setNext(pHead);
 			pHead = newItem;
+		}
+
+		success = true;
+	}
+
+	return success;
+}
+
+/*************************************************************
+ * Function: insertAtEnd ()                                  *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: creates a new GroceryItem object with the    *
+ *		input data and inserts it at the end of the list     *
+ * Input parameters: string info                             *
+ * Returns: bool                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
+bool GroceryList::insertAtEnd(string info) {
+	bool success = false;
+	GroceryItem* newItem = new GroceryItem(info);
+	GroceryItem* pCurrent;
+
+	// check that memory was allocated succesfully
+	if (newItem != 0) {
+		// if list is empty, set pHead to the new item
+		if (this->isEmpty()) {
+			pHead = newItem;
+		}
+		// otherwise insert new item at end
+		else {
+			pCurrent = pHead;
+			// seek to last item of list
+			while (pCurrent->getNext() != NULL) {
+				pCurrent = pCurrent->getNext();
+			}
+
+			// set newItem as new end of list
+			pCurrent->setNext(newItem);
 		}
 
 		success = true;

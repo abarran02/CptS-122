@@ -61,6 +61,38 @@ Queue::Queue(bool express) {
 }
 
 /*************************************************************
+ * Function: Queue ()                                        *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: copy constructor for Queue class             *
+ * Input parameters: const Queue& copyQueue                  *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
+Queue::Queue(const Queue& copyQueue) {
+	QueueNode* pCurrent = copyQueue.getHead();
+	GroceryList* groceryCurrent;
+
+	mExpress = copyQueue.mExpress;
+	lane = copyQueue.lane;
+	pHead = NULL;
+	pTail = NULL;
+
+	if (pCurrent == NULL) {
+		totalServed = copyQueue.totalServed;
+	}
+	else {
+		totalServed = 1;
+		while (pCurrent != NULL) {
+			groceryCurrent = new GroceryList(*(pCurrent->getGroceries()));
+			enqueue(groceryCurrent);
+			pCurrent = pCurrent->getNext();
+		}
+	}
+}
+
+/*************************************************************
  * Function: ~Queue ()                                       *
  * Date Created:                                             *
  * Date Last Modified:                                       *
@@ -330,17 +362,36 @@ int Queue::calculateTotalTime(void) {
 }
 
 /*************************************************************
- * Function: decrementLeader ()                              *
+ * Function: operator-- ()                                   *
  * Date Created:                                             *
  * Date Last Modified:                                       *
- * Description: decrememnts serviceTime for the queue leader *
+ * Description: prefix decrement serviceTime for leader      *
  * Input parameters: void                                    *
  * Returns: void                                             *
  * Preconditions:                                            *
  * Postconditions:                                           *
  *************************************************************/
-void Queue::decrementLeader(void) {
+Queue& Queue::operator--() {
+	Queue temp = Queue(*this);
 	pHead->getData()->decrementServiceTime();
+	temp.getHead()->getData()->decrementServiceTime();
+	return temp;
+}
+
+/*************************************************************
+ * Function: operator-- ()                                   *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: postfix decrement serviceTime for leader     *
+ * Input parameters: void                                    *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
+Queue Queue::operator--(int) {
+	Queue temp = *this;
+	--* this;
+	return temp;
 }
 
 /*************************************************************
@@ -384,11 +435,12 @@ void Queue::printEntrance(int currentTime) {
  * Postconditions:                                           *
  *************************************************************/
 void Queue::resetServed(void) {
+	// what
 	totalServed = 1;
 }
 
 /*************************************************************
- * Function: calculateTServiceTime ()                        *
+ * Function: calculateServiceTime ()                         *
  * Date Created:                                             *
  * Date Last Modified:                                       *
  * Description: calculates the service time of a given       *

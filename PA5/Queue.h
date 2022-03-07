@@ -24,6 +24,7 @@ class Queue {
 public:
     Queue();
     Queue(bool express);
+    Queue(const Queue& copyQueue);
     ~Queue();
 
     QueueNode* getHead(void) const;
@@ -36,13 +37,14 @@ public:
     void dequeue(void);
 
     int getLength(void);
-    void printQueue(void);
     int calculateTotalTime(void);
-
-    void decrementLeader(void);
+    void resetServed(void);
     bool leaderIsDone(void) const;
 
-    void resetServed(void);
+    Queue& operator--();
+    Queue operator--(int);
+
+    void printQueue(void);
     
 private:
     QueueNode* pHead;

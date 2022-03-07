@@ -268,11 +268,11 @@ void runSimulation(int n) {
 		}
 
 		// increment time and decrement leaders' service times
-		if (!expressLane.isEmpty()) {
-			expressLane.decrementLeader();
+		if (!expressLane.isEmpty()) {;
+			expressLane--;
 		}
 		if (!normalLane.isEmpty()) {
-			normalLane.decrementLeader();
+			normalLane--;
 		}
 
 		currentTime++;

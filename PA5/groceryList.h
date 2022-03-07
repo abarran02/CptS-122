@@ -29,10 +29,12 @@ private:
 	GroceryItem* pHead;
 public:
 	GroceryList();
+	GroceryList(const GroceryList& copyList);
 	~GroceryList();
 
 	bool isEmpty(void);
 	bool insertAtFront(string info);
+	bool insertAtEnd(string info);
 
 	GroceryItem* getHead(void) const;
 
