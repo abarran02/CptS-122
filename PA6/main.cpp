@@ -53,6 +53,7 @@ int main(void) {
 	strStream << convert.rdbuf();
 	line = strStream.str();
 
+	BSTNode<Morse>* current;
 	// iterate over characters of input string and print Morse code equivalent
 	for (int i = 0; i < line.length(); i++) {
 		// for printing, as no Morse equivalent for newline
@@ -62,7 +63,10 @@ int main(void) {
 		}
 
 		// search BST for code and print to screen
-		cout << bstMorse.search((Morse)line[i])->getData();
+		current = bstMorse.search((Morse)line[i]);
+		if (current != NULL) {
+			cout << current->getData();
+		}
 	}
 
 	// close Convert.txt

@@ -25,7 +25,6 @@ template <class T>
 class BST {
 public:
 	BST();
-	BST(BSTNode<T>* newRoot);
 	~BST();
 
 	void insert(const T& newData);
@@ -35,31 +34,84 @@ public:
 private:
 	BSTNode<T>* pRoot;
 
+	BST(BSTNode<T>* newRoot);
+
 	void insert(BSTNode<T>* pTree, const T& newData);
 	BSTNode<T>* search(BSTNode<T>* pTree, T query);
 	void inOrderTraversal(BSTNode<T>* pTree);
 };
 
+/*************************************************************
+ * Function: BST ()                                          *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: default constructor for BST class            *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template <class T>
 BST<T>::BST() {
 	pRoot = NULL;
 }
 
+/*************************************************************
+ * Function: BST ()                                          *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: private helper constructor for BST class     *
+ * Input parameters: BSTNode<T>* newRoot                     *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template <class T>
 BST<T>::BST(BSTNode<T>* newRoot) {
 	pRoot = newRoot;
 }
 
+/*************************************************************
+ * Function: ~BST ()                                         *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: destructor for BST class                     *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template <class T>
 BST<T>::~BST() {
 	delete pRoot;
 }
 
+/*************************************************************
+ * Function: insert ()                                       *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: helper function to insert new data into      *
+ *		binary tree                                          *
+ * Input parameters: const T& newData                        *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template <class T>
 void BST<T>::insert(const T& newData) {
 	insert(pRoot, newData);
 }
 
+/*************************************************************
+ * Function: insert ()                                       *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: insert new data into binary tree             *
+ * Input parameters: BSTNode<T>* pTree, const T& newData     *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template <class T>
 void BST<T>::insert(BSTNode<T>* pTree, const T& newData) {
 	// base case if tree is empty
@@ -96,11 +148,31 @@ void BST<T>::insert(BSTNode<T>* pTree, const T& newData) {
 	}
 }
 
+/*************************************************************
+ * Function: search ()                                       *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: helper function to search for data in tree   *
+ * Input parameters: T query                                 *
+ * Returns: BSTNode<T>*                                      *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template<class T>
 BSTNode<T>* BST<T>::search(T query) {
 	return search(pRoot, query);
 }
 
+/*************************************************************
+ * Function: search ()                                       *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: search for data in tree                      *
+ * Input parameters: BSTNode<T>* pTree, T query              *
+ * Returns: BSTNode<T>*                                      *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template<class T>
 BSTNode<T>* BST<T>::search(BSTNode<T>* pTree, T query) {
 	// check that pTree is not NULL
@@ -127,11 +199,32 @@ BSTNode<T>* BST<T>::search(BSTNode<T>* pTree, T query) {
 	}
 }
 
+/*************************************************************
+ * Function: print ()                                        *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: helper function to print tree to screen      *
+ * Input parameters: void                                    *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template<class T>
 void BST<T>::print(void) {
 	inOrderTraversal(pRoot);
 }
 
+/*************************************************************
+ * Function: inOrderTraversal ()                             *
+ * Date Created:                                             *
+ * Date Last Modified:                                       *
+ * Description: traverses binary tree in order to print      *
+ *		contents to screen                                   *
+ * Input parameters: BSTNode<T>* pTree                       *
+ * Returns: void                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 template<class T>
 void BST<T>::inOrderTraversal(BSTNode<T>* pTree) {
 	// left, current, right
