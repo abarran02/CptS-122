@@ -13,13 +13,14 @@ void Wrapper::printMenu() {
 
 string Wrapper::getDate() {
 	string date;
+	char buffer[5];
 	time_t t = time(0);   // get time now
 	struct tm* now = localtime(&t);
-	date.append(itoa(now->tm_year + 1900));
+	date.append(_itoa(now->tm_year + 1900, buffer, 10));
 	date.append("-");
-	date.append(itoa(now->tm_mon + 1));
+	date.append(_itoa(now->tm_mon + 1, buffer, 10));
 	date.append("-");
-	date.append(itoa(now->tm_mday));
+	date.append(_itoa(now->tm_mday, buffer, 10));
 
 	return date;
 }
