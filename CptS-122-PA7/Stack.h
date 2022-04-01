@@ -43,7 +43,7 @@ bool Stack<T>::push(T data) {
 		return false;
 	}
 
-	mStack[99 - mLength] = data;
+	mStack[mLength] = data;
 
 	mLength++;
 	return true;
@@ -66,7 +66,7 @@ bool Stack<T>::peek(T& data) {
 		return false;
 	}
 
-	data = mStack[100 - mLength];
+	data = mStack[mLength - 1];
 	return true;
 }
 
