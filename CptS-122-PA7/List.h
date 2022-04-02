@@ -10,9 +10,10 @@ public:
 	~List();
 
 	bool isEmpty();
+	void clearList();
 	Node<T>* getHead();
 
-	bool insertAtFront(T data);
+	bool insertAtFront(T& data);
 
 private:
 	Node<T>* pHead;
@@ -34,13 +35,20 @@ bool List<T>::isEmpty() {
 }
 
 template <class T>
+void List<T>::clearList() {
+	if (!isEmpty()) {
+		delete pHead;
+	}
+}
+
+template <class T>
 Node<T>* List<T>::getHead() {
 	return pHead;
 }
 
 template <class T>
-bool List<T>::insertAtFront(T data) {
-	Node<T> pNew = new Node<T>(data);
+bool List<T>::insertAtFront(T& data) {
+	Node<T>* pNew = new Node<T>(data);
 
 	// check memory successfully allocated
 	if (pNew != 0) {
@@ -48,7 +56,7 @@ bool List<T>::insertAtFront(T data) {
 			pHead = pNew;
 		}
 		else {
-			pNew.setNext(pHead);
+			pNew->setNext(pHead);
 			pHead = pNew;
 		}
 
