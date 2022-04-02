@@ -24,7 +24,7 @@ Stack<T>::Stack() {
 
 template <class T>
 Stack<T>::~Stack() {
-	delete[] mStack;
+	//delete [] mStack;
 }
 
 template <class T>

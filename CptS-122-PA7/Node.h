@@ -3,7 +3,7 @@
 template <class T>
 class Node {
 public:
-	Node(T data);
+	Node(T& data);
 	~Node();
 
 	void setNext(Node<T>* next);
@@ -16,7 +16,7 @@ private:
 };
 
 template <class T>
-Node<T>::Node(T data) {
+Node<T>::Node(T& data) {
 	mData = data;
 	pNext = NULL;
 }
