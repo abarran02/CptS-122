@@ -1,7 +1,5 @@
 #pragma once
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -12,13 +10,13 @@
 
 using std::cout;
 using std::cin;
-using std::endl;
 using std::fstream;
 using std::getline;
+using std::stringstream;
 
 class Wrapper {
 public:
-	Wrapper(string classFile);
+	Wrapper(string classFile, string masterFile);
 	~Wrapper();
 	Wrapper(const Wrapper& app);
 
@@ -28,6 +26,10 @@ private:
 	List<Data> mMaster;
 	string mClassFile;
 	fstream classStream;
+	string mMasterFile;
+	fstream masterStream;
+
+	bool checkOpenFiles();
 
 	void printMenu();
 	void importCourseList();
@@ -37,8 +39,25 @@ private:
 	void editAbsences();
 	void generateReport();
 
-	string getDate();
-	Data parseLine(string line);
+	Data parseLine(string line, bool master);
+
+	void fprintCommaSeparated() {
+		masterStream << endl;
+	}
+
+	template<typename First, typename ... Strings>
+	void fprintCommaSeparated(First arg, const Strings&... rest) {
+		// with help from https://stackoverflow.com/questions/9040617/
+		// and https://stackoverflow.com/questions/12024304/
+		if (sizeof...(rest) == 0) {
+			masterStream << arg;
+		}
+		else {
+			masterStream << arg << ",";
+		}
+		
+		fprintCommaSeparated(rest...);
+	}
 };
 
 int promptIntInRange(int min, int max, string message);

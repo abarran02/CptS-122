@@ -9,8 +9,8 @@ public:
 
 	bool push(T data);
 	bool pop(T &data);
-	bool peek(T& data);
-	bool isEmpty();
+	bool peek(T& data) const;
+	bool isEmpty() const;
 
 private:
 	T mStack[100];
@@ -61,8 +61,8 @@ bool Stack<T>::pop(T& data) {
 }
 
 template <class T>
-bool Stack<T>::peek(T& data) {
-	if (isEmpty()) {
+bool Stack<T>::peek(T& data) const {
+	if (this->isEmpty()) {
 		return false;
 	}
 
@@ -71,6 +71,6 @@ bool Stack<T>::peek(T& data) {
 }
 
 template <class T>
-bool Stack<T>::isEmpty() {
+bool Stack<T>::isEmpty() const {
 	return (mLength == 0);
 }

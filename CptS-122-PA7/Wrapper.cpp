@@ -1,21 +1,40 @@
 #include "Wrapper.h"
 
-Wrapper::Wrapper(string classFile) {
+Wrapper::Wrapper(string classFile, string masterFile) {
 	mClassFile = classFile;
 	classStream.open(classFile);
+
+	mMasterFile = masterFile;
+	masterStream.open(mMasterFile);
 }
 
 Wrapper::~Wrapper() {
 	classStream.close();
+	masterStream.close();
 }
 
 Wrapper::Wrapper(const Wrapper& app) {
 	classStream.open(app.mClassFile);
+	masterStream.open(app.mMasterFile);
+}
+
+bool Wrapper::checkOpenFiles() {
+	// check that both class and master files opened successfully
+	if (!classStream.is_open()) {
+		cout << "Unable to open " << mClassFile;
+		return false;
+	}
+	else if (!masterStream.is_open()) {
+		cout << "Unable to open " << mMasterFile;
+		return false;
+	}
+
+	return true;
 }
 
 void Wrapper::run() {
 	int option;
-	bool exit = false;
+	bool exit = !checkOpenFiles();
 
 	while (!exit) {
 		// display menu and prompt user for a menu option to execute
@@ -59,20 +78,6 @@ void Wrapper::printMenu() {
 	}
 }
 
-string Wrapper::getDate() {
-	string date;
-	char buffer[5];
-	time_t t = time(0);   // get time now
-	struct tm* now = localtime(&t);
-	date.append(_itoa(now->tm_year + 1900, buffer, 10));
-	date.append("-");
-	date.append(_itoa(now->tm_mon + 1, buffer, 10));
-	date.append("-");
-	date.append(_itoa(now->tm_mday, buffer, 10));
-
-	return date;
-}
-
 void Wrapper::importCourseList() {
 	string line;
 	mMaster.clearList();
@@ -83,18 +88,19 @@ void Wrapper::importCourseList() {
 	
 	// iterate 2nd line through end
 	while (getline(classStream, line)) {
-		newData = parseLine(line);
+		newData = parseLine(line, false);
 		mMaster.insertAtFront(newData);
 	}
 }
 
-Data Wrapper::parseLine(string line) {
-	string item, name;
-	std::stringstream lineStream;
+Data Wrapper::parseLine(string line, bool master) {
+	string item, date;
+	stringstream lineStream, nameStream;
 	Data newData;
 
 	// load line into string stream
 	lineStream.str(line);
+	nameStream.str(string());
 
 	getline(lineStream, item, ',');
 	newData.setRecord(stoi(item));
@@ -102,13 +108,11 @@ Data Wrapper::parseLine(string line) {
 	getline(lineStream, item, ',');
 	newData.setID(stoi(item));
 
-	name = "";
 	getline(lineStream, item, ',');
-	name.append(item);
-	name.append(",");
+	nameStream << item << ",";
 	getline(lineStream, item, ',');
-	name.append(item);
-	newData.setName(name);
+	nameStream << item;
+	newData.setName(nameStream.str());
 
 	getline(lineStream, item, ',');
 	newData.setEmail(item);
@@ -127,19 +131,106 @@ Data Wrapper::parseLine(string line) {
 	getline(lineStream, item, ',');
 	newData.setLevel(item);
 
+	// if importing from master list file
+	if (master) {
+		getline(lineStream, item, ',');
+		// check if there are absences to import
+		if (stoi(item) != 0) {
+			// split dates and push to stack if available
+			getline(lineStream, item, ',');
+			if (item != "") {
+				// remove leading and trailing quotation marks
+				item = item.substr(1, item.length() - 2);
+				nameStream.str(item);
+				
+				// split final string by comma delimiter
+				while (getline(nameStream, date, ',')) {
+					newData.addAbsence(date);
+				}
+			}
+		}
+	}
+
 	return newData;
 }
 
 void Wrapper::loadMasterList() {
+	string line;
+	mMaster.clearList();
+	Data newData;
 
+	// iterate file through end
+	while (getline(masterStream, line)) {
+		newData = parseLine(line, true);
+		mMaster.insertAtFront(newData);
+	}
 }
 
 void Wrapper::storeMasterList() {
+	string date;
+	stringstream line;
+	Node<Data>* pCurrent = mMaster.getHead();
+	Data* cData;
+	Stack<string> absenceStack;
 
+	// iterate over master list and store data to file
+	while (pCurrent != NULL) {
+		line.str(string());
+		// get current data to operate on
+		cData = pCurrent->getData();
+
+		// construct string for absence dates
+		if (cData->getAbsenceCount() > 0) {
+			line << "\"";
+			// get a copy of cData absence stack
+			absenceStack = cData->getAbsenceStack();
+			// pop each item from stack
+			while (absenceStack.pop(date)) {
+				// add a comma as long as item isn't last in the list
+				if (absenceStack.isEmpty()) {
+					line << date;
+				}
+				else {
+					line << date << ",";
+				}
+			}
+			line << "\"";
+		}
+
+		// this solution is more memory intensive than a string of << calls
+		// but this is more readable to me
+		fprintCommaSeparated(cData->getRecord(), cData->getID(), cData->getName(), cData->getEmail(),
+			cData->getUnits(), cData->getProgram(), cData->getLevel(), cData->getAbsenceCount(), line.str());
+
+		// increment pCurrent
+		pCurrent = pCurrent->getNext();
+	}
 }
 
 void Wrapper::markAbsences() {
+	Node<Data>* pCurrent = mMaster.getHead();
+	Data* cData;
+	int option;
 
+	// iterate over master list
+	while (pCurrent != NULL) {
+		// print student name and absence options
+		cData = pCurrent->getData();
+		cout << "Was " << cData->getName() << " absent today?" << endl;
+		cout << "[0] Yes" << endl << "[1] No" << endl;
+		
+		option = promptIntInRange(0, 1, "Enter an option: ");
+
+		// add absence to list
+		if (option == 0) {
+			cData->addAbsence( getDate() );
+		}
+
+		// increment pCurrent
+		pCurrent = pCurrent->getNext();
+		system("CLS");
+	}
+	
 }
 
 void Wrapper::editAbsences() {
@@ -147,7 +238,30 @@ void Wrapper::editAbsences() {
 }
 
 void Wrapper::generateReport() {
+	Node<Data>* pCurrent = mMaster.getHead();
+	Data* cData;
+	cout << "[0] Generate report for all students" << endl << "[1+] Show only student with defined absences or more" << endl;
+	int option = promptIntInRange(0, std::numeric_limits<int>::max(), "Enter an option: ");
 
+	if (option == 0) {
+		// print all student info
+		while (pCurrent != NULL) {
+			cout << *(pCurrent->getData()) << endl;
+
+			pCurrent = pCurrent->getNext();
+		}
+	}
+	else {
+		// print only students with option or more absences
+		while (pCurrent != NULL) {
+			cData = pCurrent->getData();
+			if (cData->getAbsenceCount() >= option) {
+				cout << *(pCurrent->getData()) << endl;
+			}
+
+			pCurrent = pCurrent->getNext();
+		}
+	}
 }
 
 /*************************************************************

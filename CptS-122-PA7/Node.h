@@ -9,7 +9,7 @@ public:
 	void setNext(Node<T>* next);
 	Node<T>* getNext();
 
-	T getData();
+	T* getData();
 private:
 	T mData;
 	Node<T>* pNext;
@@ -37,6 +37,6 @@ Node<T>* Node<T>::getNext() {
 }
 
 template <class T>
-T Node<T>::getData() {
-	return mData;
+T* Node<T>::getData() {
+	return &mData;
 }
