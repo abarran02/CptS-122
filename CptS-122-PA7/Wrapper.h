@@ -36,7 +36,11 @@ private:
 	void loadMasterList();
 	void storeMasterList();
 	void markAbsences();
+
 	void editAbsences();
+	Node<Data>* getStudentNode(int id);
+	Node<Data>* getStudentNode(string name);
+
 	void generateReport();
 
 	Data parseLine(string line, bool master);

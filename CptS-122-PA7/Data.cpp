@@ -80,9 +80,14 @@ string Data::getLevel() const {
 	return mLevel;
 }
 
-void Data::addAbsence(string date) {
+void Data::addAbsence() {
 	mAbsences++;
 	mAbsentDates.push(getDate());
+}
+
+void Data::addAbsence(string date) {
+	mAbsences++;
+	mAbsentDates.push(date);
 }
 
 void Data::setAbsences(int absences) {
@@ -91,6 +96,14 @@ void Data::setAbsences(int absences) {
 
 int Data::getAbsenceCount() const {
 	return mAbsences;
+}
+
+void Data::clearAbsences() {
+	string clear;
+
+	while (mAbsentDates.pop(clear)) {
+		mAbsences--;
+	}
 }
 
 string Data::getRecentAbsence() const {

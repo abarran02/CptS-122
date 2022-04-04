@@ -35,9 +35,11 @@ public:
 	void setLevel(string level);
 	string getLevel() const;
 
+	void addAbsence();
 	void addAbsence(string date);
 	void setAbsences(int absences);
 	int getAbsenceCount() const;
+	void clearAbsences();
 
 	string getRecentAbsence() const;
 	Stack<string> getAbsenceStack() const;

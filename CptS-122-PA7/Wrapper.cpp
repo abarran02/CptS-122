@@ -233,13 +233,107 @@ void Wrapper::markAbsences() {
 	
 }
 
-void Wrapper::editAbsences() {
+Node<Data>* Wrapper::getStudentNode(int id) {
+	Node<Data>* pCurrent = mMaster.getHead();
 
+	// iterate over list to find matching student ID
+	while (pCurrent != NULL) {
+		// return matching Node if found
+		if (pCurrent->getData()->getID() == id) {
+			return pCurrent;
+		}
+
+		// increment pCurrent
+		pCurrent = pCurrent->getNext();
+	}
+
+	return NULL;
+}
+
+Node<Data>* Wrapper::getStudentNode(string name) {
+	Node<Data>* pCurrent = mMaster.getHead();
+
+	// iterate over list to find matching student ID
+	while (pCurrent != NULL) {
+		// return matching Node if found
+		if (pCurrent->getData()->getName() == name) {
+			return pCurrent;
+		}
+
+		// increment pCurrent
+		pCurrent = pCurrent->getNext();
+	}
+
+	return NULL;
+}
+
+void Wrapper::editAbsences() {
+	Node<Data>* student;
+	Stack<string> absences;
+	string name, pop;
+	int option;
+	bool found = false;
+	cout << "Enter student name or ID: ";
+	cin >> name;
+
+	// check if user entered an ID or student name
+	if (isdigit(name[0])) {
+		student = getStudentNode(stoi(name));
+	}
+	else {
+		student = getStudentNode(name);
+	}
+
+	// continue as long as a matching student was found
+	if (student != NULL) {
+		// get old absence list and clear data in student pointer
+		absences = student->getData()->getAbsenceStack();
+		student->getData()->clearAbsences();
+		// get user input for date to edit
+		cout << "Enter date to edit: ";
+		cin >> name;
+		// get whether student was present on this date
+		cout << "[0] Student was present" << endl << "[1] Student was absent" << endl;
+		option = promptIntInRange(0, 1, "Enter an option: ");
+
+		// iterate over original absence stack
+		while (absences.pop(pop)) {
+			// as long as entered date hasn't yet been modified in stack
+			if (!found && (pop == name || pop > name)) {
+				// date found in original stack or entered date is before current date in stack
+				if (option) {
+					// ensure student was actually absent and add back to stack
+					if (pop > name) {
+						student->getData()->addAbsence(pop);
+					}
+
+					student->getData()->addAbsence(name);
+				}
+				
+				found = true;
+			}
+			else {
+				// add the rest of the old stack to the new stack
+				student->getData()->addAbsence(pop);
+			}
+		}
+
+		// need to reverse absence stack
+		absences = student->getData()->getAbsenceStack();
+		student->getData()->clearAbsences();
+		while (absences.pop(pop)) {
+			student->getData()->addAbsence(pop);
+		}
+	}
+	else {
+		cout << "Unable to find student " << name << endl;
+	}
 }
 
 void Wrapper::generateReport() {
 	Node<Data>* pCurrent = mMaster.getHead();
 	Data* cData;
+	// print options and get option from user
 	cout << "[0] Generate report for all students" << endl << "[1+] Show only student with defined absences or more" << endl;
 	int option = promptIntInRange(0, std::numeric_limits<int>::max(), "Enter an option: ");
 
