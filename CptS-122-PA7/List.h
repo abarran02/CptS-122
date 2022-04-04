@@ -39,6 +39,8 @@ void List<T>::clearList() {
 	if (!isEmpty()) {
 		delete pHead;
 	}
+
+	pHead = NULL;
 }
 
 template <class T>

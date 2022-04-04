@@ -5,17 +5,17 @@ Wrapper::Wrapper(string classFile, string masterFile) {
 	classStream.open(classFile);
 
 	mMasterFile = masterFile;
-	masterStream.open(mMasterFile);
+	masterRead.open(mMasterFile);
 }
 
 Wrapper::~Wrapper() {
 	classStream.close();
-	masterStream.close();
+	masterRead.close();
 }
 
 Wrapper::Wrapper(const Wrapper& app) {
 	classStream.open(app.mClassFile);
-	masterStream.open(app.mMasterFile);
+	masterRead.open(app.mMasterFile);
 }
 
 bool Wrapper::checkOpenFiles() {
@@ -24,7 +24,7 @@ bool Wrapper::checkOpenFiles() {
 		cout << "Unable to open " << mClassFile;
 		return false;
 	}
-	else if (!masterStream.is_open()) {
+	else if (!masterRead.is_open()) {
 		cout << "Unable to open " << mMasterFile;
 		return false;
 	}
@@ -82,6 +82,10 @@ void Wrapper::importCourseList() {
 	string line;
 	mMaster.clearList();
 	Data newData;
+
+	// with help from https://stackoverflow.com/questions/5343173/
+	classStream.clear();
+	classStream.seekg(0);
 
 	// discard title line
 	getline(classStream, line);
@@ -159,8 +163,11 @@ void Wrapper::loadMasterList() {
 	mMaster.clearList();
 	Data newData;
 
+	masterRead.clear();
+	masterRead.seekg(0);
+
 	// iterate file through end
-	while (getline(masterStream, line)) {
+	while (getline(masterRead, line)) {
 		newData = parseLine(line, true);
 		mMaster.insertAtFront(newData);
 	}
@@ -172,6 +179,8 @@ void Wrapper::storeMasterList() {
 	Node<Data>* pCurrent = mMaster.getHead();
 	Data* cData;
 	Stack<string> absenceStack;
+
+	masterWrite.open(mMasterFile);
 
 	// iterate over master list and store data to file
 	while (pCurrent != NULL) {
@@ -205,6 +214,8 @@ void Wrapper::storeMasterList() {
 		// increment pCurrent
 		pCurrent = pCurrent->getNext();
 	}
+
+	masterWrite.close();
 }
 
 void Wrapper::markAbsences() {
@@ -323,6 +334,11 @@ void Wrapper::editAbsences() {
 		student->getData()->clearAbsences();
 		while (absences.pop(pop)) {
 			student->getData()->addAbsence(pop);
+		}
+
+		// entereed date either not in or after dates in stack
+		if (!found) {
+			student->getData()->addAbsence(name);
 		}
 	}
 	else {
