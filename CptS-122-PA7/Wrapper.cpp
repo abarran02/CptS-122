@@ -1,5 +1,28 @@
+/*******************************************************************************
+ * Programmer: Alec Barran                                                     *
+ * Class: CptS 122; Lab Section 06                                             *
+ * Programming Assignment: PA7                                                 *
+ * Date: 04/06/2022                                                            *
+ *                                                                             *
+ * Description: Read class list from .csv and modify absences for each student *
+ *		and re-store the data in a relevent .txt format. Used data structures  *
+ *		include stacks and linked lists.                                       *
+ *                                                                             *
+ * Relevant Formulas: Refer to each function definition.                       *
+ *                                                                             *
+ * Format of record in input file (classList.csv): see csv header              *
+ ******************************************************************************/
+
 #include "Wrapper.h"
 
+ /*************************************************************
+  * Function: Wrapper ()                                      *
+  * Description: constructor for Wrapper class                *
+  * Input parameters: string classFile, string masterFile     *
+  * Returns:                                                  *
+  * Preconditions:                                            *
+  * Postconditions:                                           *
+  *************************************************************/
 Wrapper::Wrapper(string classFile, string masterFile) {
 	mClassFile = classFile;
 	classStream.open(classFile);
@@ -7,17 +30,41 @@ Wrapper::Wrapper(string classFile, string masterFile) {
 	mMasterFile = masterFile;
 	masterRead.open(mMasterFile);
 }
+/*************************************************************
+ * Function: ~Wrapper ()                                     *
+ * Description: denstructor for Wrapper class                *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 
 Wrapper::~Wrapper() {
 	classStream.close();
 	masterRead.close();
 }
 
+/*************************************************************
+ * Function: Wrapper ()                                      *
+ * Description: copy constructor for Wrapper class           *
+ * Input parameters: const Wrapper& app                      *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 Wrapper::Wrapper(const Wrapper& app) {
 	classStream.open(app.mClassFile);
 	masterRead.open(app.mMasterFile);
 }
 
+/*************************************************************
+ * Function: checkOpenFiles ()                               *
+ * Description: determines if files successfully opened      *
+ * Input parameters:                                         *
+ * Returns: bool                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 bool Wrapper::checkOpenFiles() {
 	// check that both class and master files opened successfully
 	if (!classStream.is_open()) {
@@ -32,10 +79,20 @@ bool Wrapper::checkOpenFiles() {
 	return true;
 }
 
+/*************************************************************
+ * Function: run ()                                          *
+ * Description: application skeleton for Wrapper functions   *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::run() {
 	int option;
 	bool exit = !checkOpenFiles();
 
+	// on first run: as long as files were opened successfully
+	// thereafter: as long as user doesn't enter exit function
 	while (!exit) {
 		// display menu and prompt user for a menu option to execute
 		printMenu();
@@ -69,6 +126,14 @@ void Wrapper::run() {
 	}
 }
 
+/*************************************************************
+ * Function: printMenu ()                                    *
+ * Description: print all menu options to the screen         *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::printMenu() {
 	string options[7] = { "Import course list", "Load master list", "Store master list",
 	"Mark absences", "Edit absences", "Generate report", "Exit" };
@@ -78,6 +143,14 @@ void Wrapper::printMenu() {
 	}
 }
 
+/*************************************************************
+ * Function: importCourseList                                *
+ * Description: print all menu options to the screen         *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions: classStream is a open ifstream             *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::importCourseList() {
 	string line;
 	mMaster.clearList();
@@ -97,6 +170,14 @@ void Wrapper::importCourseList() {
 	}
 }
 
+/*************************************************************
+ * Function: parseLine ()                                    *
+ * Description: parses csv string into Data class            *
+ * Input parameters: string line, bool master                *
+ * Returns: Data                                             *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 Data Wrapper::parseLine(string line, bool master) {
 	string item, date;
 	stringstream lineStream, nameStream;
@@ -158,6 +239,14 @@ Data Wrapper::parseLine(string line, bool master) {
 	return newData;
 }
 
+/*************************************************************
+ * Function: loadMasterList ()                               *
+ * Description: loads master list from file to List          *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions: masterRead is an open ifstream             *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::loadMasterList() {
 	string line;
 	mMaster.clearList();
@@ -173,6 +262,14 @@ void Wrapper::loadMasterList() {
 	}
 }
 
+/*************************************************************
+ * Function: storeMasterList ()                              *
+ * Description: stores master List to file                   *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::storeMasterList() {
 	string date;
 	stringstream line;
@@ -218,6 +315,15 @@ void Wrapper::storeMasterList() {
 	masterWrite.close();
 }
 
+/*************************************************************
+ * Function: markAbsences ()                                 *
+ * Description: loops through master list and prompts user   *
+ *		for today's absences for each student                *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::markAbsences() {
 	Node<Data>* pCurrent = mMaster.getHead();
 	Data* cData;
@@ -244,6 +350,14 @@ void Wrapper::markAbsences() {
 	
 }
 
+/*************************************************************
+ * Function: getStudentNode ()                               *
+ * Description: searches master list for matching student ID *
+ * Input parameters: int id                                  *
+ * Returns: Node<Data>*                                      *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 Node<Data>* Wrapper::getStudentNode(int id) {
 	Node<Data>* pCurrent = mMaster.getHead();
 
@@ -261,13 +375,24 @@ Node<Data>* Wrapper::getStudentNode(int id) {
 	return NULL;
 }
 
+/*************************************************************
+ * Function: getStudentNode ()                               *
+ * Description: overload to search for matching student name *
+ * Input parameters: string name                             *
+ * Returns: Node<Data>*                                      *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 Node<Data>* Wrapper::getStudentNode(string name) {
+	string cName;
 	Node<Data>* pCurrent = mMaster.getHead();
 
 	// iterate over list to find matching student ID
 	while (pCurrent != NULL) {
 		// return matching Node if found
-		if (pCurrent->getData()->getName() == name) {
+		cName = pCurrent->getData()->getName();
+		// also checks for student name without quotation marks
+		if (cName == name || cName.substr(1, cName.length() - 2) == name) {
 			return pCurrent;
 		}
 
@@ -278,6 +403,14 @@ Node<Data>* Wrapper::getStudentNode(string name) {
 	return NULL;
 }
 
+/*************************************************************
+ * Function: editAbsences ()                                 *
+ * Description: edit absence Stack for a searched student    *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::editAbsences() {
 	Node<Data>* student;
 	Stack<string> absences;
@@ -300,9 +433,11 @@ void Wrapper::editAbsences() {
 		// get old absence list and clear data in student pointer
 		absences = student->getData()->getAbsenceStack();
 		student->getData()->clearAbsences();
+		
 		// get user input for date to edit
-		cout << "Enter date to edit: ";
+		cout << "Enter date to edit (must be zero padded in yyyy-mm-dd format): ";
 		cin >> name;
+
 		// get whether student was present on this date
 		cout << "[0] Student was present" << endl << "[1] Student was absent" << endl;
 		option = promptIntInRange(0, 1, "Enter an option: ");
@@ -346,6 +481,15 @@ void Wrapper::editAbsences() {
 	}
 }
 
+/*************************************************************
+ * Function: generateReport ()                               *
+ * Description: prints student data to screen based on input *
+ *		number of absences                                   *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Wrapper::generateReport() {
 	Node<Data>* pCurrent = mMaster.getHead();
 	Data* cData;
@@ -376,8 +520,6 @@ void Wrapper::generateReport() {
 
 /*************************************************************
  * Function: promptIntInRange ()                             *
- * Date Created:                                             *
- * Date Last Modified:                                       *
  * Description: prompts user with given message for an int   *
  *		within the range provided                            *
  * Input parameters: int min, int max, string message        *

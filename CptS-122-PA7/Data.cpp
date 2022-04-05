@@ -1,5 +1,28 @@
+/*******************************************************************************
+ * Programmer: Alec Barran                                                     *
+ * Class: CptS 122; Lab Section 06                                             *
+ * Programming Assignment: PA7                                                 *
+ * Date: 04/06/2022                                                            *
+ *                                                                             *
+ * Description: Read class list from .csv and modify absences for each student *
+ *		and re-store the data in a relevent .txt format. Used data structures  *
+ *		include stacks and linked lists.                                       *
+ *                                                                             *
+ * Relevant Formulas: Refer to each function definition.                       *
+ *                                                                             *
+ * Format of record in input file (classList.csv): see csv header              *
+ ******************************************************************************/
+
 #include "Data.h"
 
+ /*************************************************************
+  * Function: Data ()                                         *
+  * Description: default constructor for Data class           *
+  * Input parameters:                                         *
+  * Returns:                                                  *
+  * Preconditions:                                            *
+  * Postconditions:                                           *
+  *************************************************************/
 Data::Data() {
 	mRecord = -1;
 	mID = -1;
@@ -12,6 +35,16 @@ Data::Data() {
 	mAbsences = 0;
 }
 
+/*************************************************************
+ * Function: Data ()                                         *
+ * Description: overload constructor for Data class          *
+ * Input parameters: int record, int id, string name,        *
+ *		string email, int units, string program,             *
+ *		string level                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 Data::Data(int record, int id, string name, string email, int units, string program, string level) {
 	mRecord = record;
 	mID = id;
@@ -24,6 +57,16 @@ Data::Data(int record, int id, string name, string email, int units, string prog
 	mAbsences = 0;
 }
 
+
+/*************************************************************
+ * Function: get/setMember ()                                *
+ * Description: getters and setters for member attributes,   *
+ *		there are too many for me to write comments for each *
+ * Input parameters: read each declaration                   *
+ * Returns: read each declaration                            *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Data::setRecord(int record) {
 	mRecord = record;
 }
@@ -80,11 +123,27 @@ string Data::getLevel() const {
 	return mLevel;
 }
 
+/*************************************************************
+ * Function: addAbsence ()                                   *
+ * Description: add today's date to students absence Stack   *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Data::addAbsence() {
 	mAbsences++;
 	mAbsentDates.push(getDate());
 }
 
+/*************************************************************
+ * Function: addAbsence ()                                   *
+ * Description: add given date to students absence Stack     *
+ * Input parameters: string date                             *
+ * Returns:                                                  *
+ * Preconditions: date is in given format (yyyy-mm-dd)       *
+ * Postconditions:                                           *
+ *************************************************************/
 void Data::addAbsence(string date) {
 	mAbsences++;
 	mAbsentDates.push(date);
@@ -98,6 +157,14 @@ int Data::getAbsenceCount() const {
 	return mAbsences;
 }
 
+/*************************************************************
+ * Function: clearAbsences ()                                *
+ * Description: delete all of a student's absence Stack      *
+ * Input parameters:                                         *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 void Data::clearAbsences() {
 	string clear;
 
@@ -106,6 +173,14 @@ void Data::clearAbsences() {
 	}
 }
 
+/*************************************************************
+ * Function: getRecentAbsence ()                             *
+ * Description: get date of student's most recent absence    *
+ * Input parameters:                                         *
+ * Returns: string                                           *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 string Data::getRecentAbsence() const {
 	string date;
 	if (mAbsentDates.peek(date)) {
@@ -120,20 +195,38 @@ Stack<string> Data::getAbsenceStack() const {
 	return mAbsentDates;
 }
 
+/*************************************************************
+ * Function: getDate ()                                      *
+ * Description: get string of today's date                   *
+ * Input parameters:                                         *
+ * Returns: string                                           *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 string getDate() {
-	string date;
-	char buffer[5];
+	char date[12];
 	time_t t = time(0);   // get time now
 	struct tm* now = localtime(&t);
-	date.append(_itoa(now->tm_year + 1900, buffer, 10));
-	date.append("-");
-	date.append(_itoa(now->tm_mon + 1, buffer, 10));
-	date.append("-");
-	date.append(_itoa(now->tm_mday, buffer, 10));
 
-	return date;
+	// get current date
+	int year = now->tm_year + 1900, 
+		month = now->tm_mon + 1,
+		day = now->tm_mday;
+
+	// format string with zero padding
+	sprintf(date, "%04d-%02d-%02d", year, month, day);
+
+	return string(date);
 }
 
+/*************************************************************
+ * Function: operator <<                                     *
+ * Description: << overload to print Data to screen          *
+ * Input parameters: ostream& lhs, const Data rhs            *
+ * Returns:                                                  *
+ * Preconditions:                                            *
+ * Postconditions:                                           *
+ *************************************************************/
 ostream& operator<<(ostream& lhs, const Data rhs) {
 	lhs << "Student Record: " << rhs.getRecord() << endl;
 	lhs << "ID: " << rhs.getID() << endl;
