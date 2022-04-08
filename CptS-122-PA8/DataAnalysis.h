@@ -1,9 +1,11 @@
 #pragma once
 
 #include <fstream>
+#include <sstream>
 #include "BST.h"
 
 using std::getline;
+using std::stoi;
 
 typedef struct item {
 	int units;

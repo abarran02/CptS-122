@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include "Node.h"
 
 using std::ostream;
@@ -20,4 +21,4 @@ public:
 	void printData();
 };
 
-ostream& operator<<(const ostream& lhs, const TransactionNode& rhs);
+ostream& operator<<(ostream& lhs, const TransactionNode& rhs);

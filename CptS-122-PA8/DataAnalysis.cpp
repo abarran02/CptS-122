@@ -17,8 +17,26 @@ void DataAnalysis::openCsv() {
 }
 
 Item DataAnalysis::readParseLine() {
+	Item current;
+	std::stringstream parse;
 	string line;
+	// get next line in csv
 	getline(mCsvStream, line);
+
+	// load line into string stream
+	parse.str(line);
+
+	// units
+	getline(parse, line, ',');
+	current.units = stoi(line);
+	// product name
+	getline(parse, line, ',');
+	current.product = line;
+	// transaction type
+	getline(parse, line, ',');
+	current.transaction = line;
+
+	return current;
 }
 
 void DataAnalysis::readLoop() {
