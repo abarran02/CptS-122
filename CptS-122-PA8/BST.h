@@ -1,16 +1,15 @@
 /*******************************************************************************
  * Programmer: Alec Barran                                                     *
  * Class: CptS 122; Lab Section 06                                             *
- * Programming Assignment: Example                                             *
+ * Programming Assignment: PA8                                                 *
  * Date:                                                                       *
  *                                                                             *
- * Description: Reads Morse code conversions from file and inputs to a binary  *
- *			search tree. Then reads a string to convert from file and prints   *
- *			the Morse code equivalent to screen                                *
+ * Description: Reads product buying and selling data from file, place data in *
+ *			binary search trees. Then run data analysis on the input.          *
  *                                                                             *
  * Relevant Formulas: Refer to each function definition.                       *
  *                                                                             *
- * Format of record in input file (MorseTable.txt): A .- [int(space)string]    *
+ * Format of record in input file (data.csv): Units,Type,Transaction           *
  ******************************************************************************/
 
 #pragma once

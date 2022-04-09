@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Programmer: Alec Barran                                                     *
+ * Class: CptS 122; Lab Section 06                                             *
+ * Programming Assignment: PA8                                                 *
+ * Date:                                                                       *
+ *                                                                             *
+ * Description: Reads product buying and selling data from file, place data in *
+ *			binary search trees. Then run data analysis on the input.          *
+ *                                                                             *
+ * Relevant Formulas: Refer to each function definition.                       *
+ *                                                                             *
+ * Format of record in input file (data.csv): Units,Type,Transaction           *
+ ******************************************************************************/
+
 #include "BST.h"
 
 /*************************************************************
@@ -92,13 +106,25 @@ void BST::insert(Node*& pTree, const string& data, const int& units) {
 	else {
 		// right side of tree
 		if (pMem->getUnits() < units) {
-			// recursive step
-			insert(pTree->getRight(), data, units);
+			// right side empty
+			if (pTree->getRight() == NULL) {
+				pTree->setRight(new TransactionNode(data, units));
+			}
+			else {
+				// recursive step
+				insert(pTree->getRight(), data, units);
+			}
 		}
 		// left side of tree
 		else if (units < pMem->getUnits()) {
-			// recursive step
-			insert(pTree->getLeft(), data, units);
+			// left side empty
+			if (pTree->getLeft() == NULL) {
+				pTree->setLeft(new TransactionNode(data, units));
+			}
+			else {
+				// recursive step
+				insert(pTree->getLeft(), data, units);
+			}
 		}
 	}
 }
@@ -127,9 +153,9 @@ void BST::inOrderTraversal() {
 void BST::inOrderTraversal(Node* pTree) {
 	// left, current, right
 	if (pTree != NULL) {
-		pTree->getLeft()->printData();
+		inOrderTraversal(pTree->getLeft());
 		pTree->printData();
-		pTree->getRight()->printData();
+		inOrderTraversal(pTree->getRight());
 	}
 }
 
